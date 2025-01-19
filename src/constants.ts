@@ -1,2 +1,2 @@
-export const MAX_POST_ITEM_TITLE_LENGTH = 20;
-export const MAX_POST_ITEM_DESCRIPTION_LENGTH = 40;
+/** Would put in .env file in production application */
+export const POSTS_API_URL = "https://jsonplaceholder.typicode.com/posts";
