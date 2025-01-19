@@ -33,7 +33,7 @@ const PostItem = ({ post }: PostItemProps) => {
         onClick={() => deletePostMutation.mutate(id)}
         role="button"
       >
-        Delete
+        Remove
       </button>
     </div>
   );
