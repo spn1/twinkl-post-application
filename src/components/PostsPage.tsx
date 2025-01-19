@@ -10,9 +10,8 @@ const PostsPage = () => {
   const { isLoading, isError, data, error } = useQuery({
     queryKey: ["posts", searchQuery],
     queryFn: () => fetchPosts(searchQuery),
+    initialData: [],
   });
-
-  console.log("[PostsPage] searchQuery:", searchQuery);
 
   if (isError) {
     return <p>Error! {JSON.stringify(error, null, 4)}</p>;
@@ -21,13 +20,12 @@ const PostsPage = () => {
   return (
     <>
       <input
-        className="w-full md:w-80 p-2 bg-gray-200"
+        className="w-full md:w-80 md:mx-auto p-2 md:mb-16 bg-gray-200"
         placeholder="Search"
+        role="searchbox"
         onChange={(e) => setSearchQuery(e?.target?.value)}
       />
-      <div className="overflow-auto">
-        <PostList posts={data} />
-      </div>
+      <PostList posts={data} isLoading={isLoading} />
     </>
   );
 };

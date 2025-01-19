@@ -1,6 +1,8 @@
 import type { Post } from "@/types/post";
+
 type PostListProps = {
   posts: Post[];
+  isLoading: boolean;
 };
 
 type PostItemProps = {
@@ -20,7 +22,11 @@ const PostItem = ({ post }: PostItemProps) => {
   );
 };
 
-const PostList = ({ posts = [] }: PostListProps) => {
+const PostList = ({ posts = [], isLoading }: PostListProps) => {
+  if (isLoading) {
+    return <p className="text-2xl text-center my-16">Loading Posts...</p>;
+  }
+
   if (posts?.length === 0) {
     return <p>No Posts found with that title</p>;
   }
