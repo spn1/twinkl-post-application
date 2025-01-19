@@ -1,4 +1,7 @@
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+
 import type { Post } from "@/types/post";
+import { deletePost } from "@/services/post-service";
 
 type PostListProps = {
   posts: Post[];
@@ -10,14 +13,26 @@ type PostItemProps = {
 };
 
 const PostItem = ({ post }: PostItemProps) => {
-  const { title, body } = post;
+  const { title, body, id } = post;
+  const queryClient = useQueryClient();
+  const deletePostMutation = useMutation({
+    mutationFn: deletePost,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["posts"] });
+    },
+  });
+
   return (
     <div className="flex justify-between gap-4 py-2 border-b-2 border-grey border-solid">
       <div className="basis-2/3">
         <p className="text-xl line-clamp-1">{title}</p>
         <p className="text-base line-clamp-1">{body}</p>
       </div>
-      <button className="basis-1/3 rounded-md border-2 text-white bg-rose-600 border-rose-600">
+      <button
+        className="basis-1/3 rounded-md border-2 text-white bg-rose-600 border-rose-600"
+        onClick={() => deletePostMutation.mutate(id)}
+        role="button"
+      >
         Delete
       </button>
     </div>
@@ -40,7 +55,7 @@ const PostList = ({ posts = [], isLoading }: PostListProps) => {
   return (
     <div className="overflow-auto pr-2">
       <ul className="flex flex-col gap-4">
-        {posts.map((post) => (
+        {posts?.map((post) => (
           <PostItem key={`${post?.userId}-${post?.id}`} post={post} />
         ))}
       </ul>

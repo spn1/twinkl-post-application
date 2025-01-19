@@ -5,16 +5,15 @@ import { PostList } from "@/components/PostList";
 import { fetchPosts } from "@/services/post-service";
 
 const PostsPage = () => {
-  //TODO: Change default to be from query string param
   const [searchQuery, setSearchQuery] = useState<string>("");
-  const { isLoading, isError, data, error } = useQuery({
+  const { isLoading, isError, data } = useQuery({
     queryKey: ["posts", searchQuery],
     queryFn: () => fetchPosts(searchQuery),
     initialData: [],
   });
 
   if (isError) {
-    return <p>Error! {JSON.stringify(error, null, 4)}</p>;
+    return <p>Error!</p>;
   }
 
   return (
