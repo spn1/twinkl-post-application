@@ -20,7 +20,7 @@ const PostsPage = () => {
   return (
     <>
       <input
-        className="w-full md:w-80 md:mx-auto p-2 md:mb-16 bg-gray-200"
+        className="w-full md:w-80 md:mx-auto p-2 md:mb-16 bg-gray-200 text-2xl font-semibold"
         placeholder="Search"
         role="searchbox"
         onChange={(e) => setSearchQuery(e?.target?.value)}
