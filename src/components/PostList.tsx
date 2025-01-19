@@ -23,7 +23,7 @@ const PostItem = ({ post }: PostItemProps) => {
   });
 
   return (
-    <div className="flex justify-between gap-4 py-2 border-b-2 border-grey border-solid">
+    <li className="flex justify-between gap-4 py-2 border-b-2 border-grey border-solid">
       <div className="basis-2/3">
         <p className="text-xl line-clamp-1">{title}</p>
         <p className="text-base line-clamp-1">{body}</p>
@@ -32,10 +32,11 @@ const PostItem = ({ post }: PostItemProps) => {
         className="basis-1/3 rounded-md border-2 text-white bg-rose-600 border-rose-600"
         onClick={() => deletePostMutation.mutate(id)}
         role="button"
+        aria-label={`remove post ${title}`}
       >
         Remove
       </button>
-    </div>
+    </li>
   );
 };
 
