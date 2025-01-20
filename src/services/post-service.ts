@@ -7,6 +7,11 @@ const fetchPosts = async (searchQuery: string): Promise<Post[]> => {
     : `${POSTS_API_URL}/posts`;
 
   const response = await fetch(url);
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch posts");
+  }
+
   const data = await response.json();
 
   return data;

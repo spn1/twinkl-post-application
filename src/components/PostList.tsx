@@ -42,7 +42,7 @@ const PostItem = ({ post }: PostItemProps) => {
 
 const PostList = ({ posts = [], isLoading }: PostListProps) => {
   if (isLoading) {
-    return <p className="text-2xl text-center my-16">Loading Posts...</p>;
+    return <p className="text-2xl text-center my-16">Loading...</p>;
   }
 
   if (posts?.length === 0) {

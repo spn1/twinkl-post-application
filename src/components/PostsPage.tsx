@@ -6,14 +6,18 @@ import { fetchPosts } from "@/services/post-service";
 
 const PostsPage = () => {
   const [searchQuery, setSearchQuery] = useState<string>("");
-  const { isLoading, isError, data } = useQuery({
+  const { isFetching, isError, data } = useQuery({
     queryKey: ["posts", searchQuery],
     queryFn: () => fetchPosts(searchQuery),
     initialData: [],
   });
 
   if (isError) {
-    return <p>Error!</p>;
+    return (
+      <p className="text-2xl text-center my-16">
+        Sorry, there was a problem fetching your posts.
+      </p>
+    );
   }
 
   return (
@@ -27,7 +31,7 @@ const PostsPage = () => {
         />
       </div>
       <div className="p-2 overflow-auto">
-        <PostList posts={data} isLoading={isLoading} />
+        <PostList posts={data} isLoading={isFetching} />
       </div>
     </>
   );
