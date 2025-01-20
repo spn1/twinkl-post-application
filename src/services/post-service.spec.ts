@@ -20,7 +20,9 @@ const mockPosts = [
 ];
 
 const originalFetch = global.fetch;
-const mockFetch = vi.fn();
+const mockFetch = vi.fn(() => ({
+  json: async () => mockPosts,
+}));
 
 describe("fetchPosts", () => {
   beforeEach(() => {
@@ -28,7 +30,7 @@ describe("fetchPosts", () => {
   });
 
   afterEach(() => {
-    // jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   afterAll(() => {
@@ -40,5 +42,23 @@ describe("fetchPosts", () => {
 
     expect(mockFetch).toHaveBeenCalled();
     expect(mockFetch).toHaveBeenCalledWith(`${POSTS_API_URL}/posts`);
+    expect(mockFetch).toHaveBeenCalledTimes(1);
+  });
+
+  test("fetches specific posts from API with a search query", async () => {
+    await fetchPosts("test");
+
+    expect(mockFetch).toHaveBeenCalled();
+    expect(mockFetch).toHaveBeenCalledWith(`${POSTS_API_URL}/posts?title=test`);
+    expect(mockFetch).toHaveBeenCalledTimes(1);
+  });
+
+  test("fetches and returns posts from API response", async () => {
+    const data = await fetchPosts("");
+
+    expect(mockFetch).toHaveBeenCalled();
+    expect(mockFetch).toHaveBeenCalledWith(`${POSTS_API_URL}/posts`);
+    expect(mockFetch).toHaveBeenCalledTimes(1);
+    expect(data).toEqual(mockPosts);
   });
 });
