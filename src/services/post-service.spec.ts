@@ -59,7 +59,7 @@ describe("fetchPosts", () => {
 
     expect(mockFetch).toHaveBeenCalledWith(`${POSTS_API_URL}/posts`);
     expect(mockFetch).toHaveBeenCalledTimes(1);
-    expect(data).toEqual(mockPosts);
+    expect(data).toEqual({ data: mockPosts });
   });
 
   test("throws error when api returns non-ok response", async () => {

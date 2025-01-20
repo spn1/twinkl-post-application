@@ -29,6 +29,7 @@ const PostListItem = ({ post }: PostItemProps) => {
         role="button"
         aria-label={`remove post ${title}`}
         disabled={isPending}
+        data-testid={`remove-button-${id}`}
       >
         Remove
       </button>
