@@ -9,7 +9,7 @@ const PostsPage = () => {
   const { isFetching, isError, data } = useQuery({
     queryKey: ["posts", searchQuery],
     queryFn: () => fetchPosts(searchQuery),
-    initialData: [],
+    initialData: { data: [] },
   });
 
   if (isError) {
@@ -31,7 +31,7 @@ const PostsPage = () => {
         />
       </div>
       <div className="p-2 overflow-auto">
-        <PostList posts={data} isLoading={isFetching} />
+        <PostList posts={data?.data} isLoading={isFetching} />
       </div>
     </>
   );
