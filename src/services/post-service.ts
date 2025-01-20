@@ -17,16 +17,20 @@ const fetchPosts = async (searchQuery: string): Promise<Post[]> => {
   return data;
 };
 
-const deletePost = async (postId: number): Promise<number> => {
+const deletePost = async (postId: number): Promise<{ status: number }> => {
   if (!postId) {
-    return 400;
+    return { status: 400 };
   }
 
   const url = `${POSTS_API_URL}/posts/${postId}`;
 
-  const { status } = await fetch(url, { method: "DELETE" });
+  const response = await fetch(url, { method: "DELETE" });
 
-  return status;
+  if (!response.ok) {
+    throw new Error("Failed to delete post");
+  }
+
+  return { status: response?.status };
 };
 
 export { fetchPosts, deletePost };
