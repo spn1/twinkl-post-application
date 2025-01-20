@@ -18,13 +18,17 @@ const PostsPage = () => {
 
   return (
     <>
-      <input
-        className="w-full md:w-80 md:mx-auto p-2 md:mb-16 bg-gray-200 text-2xl font-semibold"
-        placeholder="Search"
-        role="searchbox"
-        onChange={(e) => setSearchQuery(e?.target?.value)}
-      />
-      <PostList posts={data} isLoading={isLoading} />
+      <div className="bg-gray-300 w-full md:mb-16 md:bg-white flex">
+        <input
+          className=" bg-gray-200 text-2xl p-2 md:mx-auto mx-4 my-4 font-semibold w-full md:w-80"
+          placeholder="Search"
+          role="searchbox"
+          onChange={(e) => setSearchQuery(e?.target?.value)}
+        />
+      </div>
+      <div className="p-2 overflow-auto">
+        <PostList posts={data} isLoading={isLoading} />
+      </div>
     </>
   );
 };

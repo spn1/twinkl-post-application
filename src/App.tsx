@@ -8,7 +8,7 @@ const queryClient = new QueryClient();
 const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
-      <main className="container mx-auto p-4 flex flex-col max-w-screen-md h-dvh">
+      <main className="container mx-auto flex flex-col max-w-screen-md h-dvh">
         <PostsPage />
       </main>
     </QueryClientProvider>
