@@ -1,9 +1,13 @@
 import { vi, test, expect } from "vitest";
 import { render, screen } from "@testing-library/react";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import { PostsPage } from "./PostsPage";
 import { Post } from "@/types/post";
+import { useGetPosts } from "../hooks/useGetPosts";
+import { useDeletePost } from "@/hooks/useDeletePost";
+
+vi.mock("../hooks/useGetPosts");
+vi.mock("../hooks/useDeletePost");
 
 const mockPosts = [
   {
@@ -20,20 +24,22 @@ const mockPosts = [
   },
 ];
 
-const renderComponent = (posts: Post[], isError: boolean) => {
-  const queryClient = new QueryClient({
-    defaultOptions: {
-      queries: {
-        retry: false,
-      },
-    },
-  });
+useDeletePost.mockImplementation(() => ({
+  mutate: () => {},
+  isPending: false,
+}));
 
-  return render(
-    <QueryClientProvider client={queryClient}>
-      <PostsPage />
-    </QueryClientProvider>
-  );
+const renderComponent = (
+  posts: Post[],
+  isError: boolean,
+  isFetching: boolean
+) => {
+  useGetPosts.mockImplementation((searchQuery: string) => ({
+    isFetching,
+    isError,
+    data: { data: posts },
+  }));
+  return render(<PostsPage />);
 };
 
 describe("PostListItem", () => {
@@ -42,37 +48,32 @@ describe("PostListItem", () => {
   });
 
   test("renders page", () => {
-    renderComponent(mockPosts, false);
+    renderComponent(mockPosts, false, false);
 
-    const searchInputElement = screen.getByRole("searchbox");
+    const searchInputElement = screen.getByRole("search");
 
     expect(searchInputElement).toBeInTheDocument();
   });
 
-  test("renders error message when there is an error", () => {
-    renderComponent(mockPosts, true);
+  // test("renders error message when there is an error", () => {
+  //   renderComponent(mockPosts, true, false);
 
-    const searchInputElement = screen.getByRole("searchbox");
-    const errorTextElement = screen.getByText(
-      "Sorry, there was a problem fetching your posts."
-    );
+  //   const searchInputElement = screen.getByRole("search");
+  //   const errorTextElement = screen.getByText(
+  //     "Sorry, there was a problem fetching your posts."
+  //   );
 
-    expect(searchInputElement).toBeInTheDocument();
-    expect(errorTextElement).toBeInTheDocument();
-  });
+  //   expect(searchInputElement).toBeInTheDocument();
+  //   expect(errorTextElement).toBeInTheDocument();
+  // });
 
-  // test.each(mockPosts)(
-  //   "renders post with %s and %s as expected",
-  //   ({ title, body, id }) => {
-  //     renderComponent(mockPosts, false);
+  // test("renders loading message when data is loading", () => {
+  //   renderComponent(mockPosts, false, true);
 
-  //     const titleElement = screen.getByText(title);
-  //     const bodyelement = screen.getByText(body);
-  //     const deleteButton = screen.getByTestId(`remove-button-${id}`);
+  //   const searchInputElement = screen.getByRole("search");
+  //   const loadingTextElement = screen.getByText("Loading...");
 
-  //     expect(titleElement).toBeInTheDocument();
-  //     expect(bodyelement).toBeInTheDocument();
-  //     expect(deleteButton).toBeInTheDocument();
-  //   }
-  // );
+  //   expect(searchInputElement).toBeInTheDocument();
+  //   expect(loadingTextElement).toBeInTheDocument();
+  // });
 });

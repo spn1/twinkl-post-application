@@ -1,16 +1,14 @@
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
 
 import { PostList } from "@/components/PostList";
-import { fetchPosts } from "@/services/post-service";
+import { useGetPosts } from "@/hooks/useGetPosts";
 
 const PostsPage = () => {
   const [searchQuery, setSearchQuery] = useState<string>("");
-  const { isFetching, isError, data } = useQuery({
-    queryKey: ["posts", searchQuery],
-    queryFn: () => fetchPosts(searchQuery),
-    initialData: { data: [] },
-  });
+  const result = useGetPosts(searchQuery);
+
+  console.log("[PostsPage] result:", result);
+  const { isFetching, isError, data } = result;
 
   if (isError) {
     return (
@@ -26,7 +24,7 @@ const PostsPage = () => {
         <input
           className=" bg-gray-200 text-2xl p-2 md:mx-auto mx-4 my-4 font-semibold w-full md:w-80"
           placeholder="Search"
-          role="searchbox"
+          role="search"
           onChange={(e) => setSearchQuery(e?.target?.value)}
         />
       </div>

@@ -1,9 +1,11 @@
 import { vi, test, expect } from "vitest";
 import { render, screen } from "@testing-library/react";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import { PostList } from "./PostList";
 import { Post } from "@/types/post";
+import { useDeletePost } from "../hooks/useDeletePost";
+
+vi.mock("../hooks/useDeletePost");
 
 const mockPosts = [
   {
@@ -21,19 +23,11 @@ const mockPosts = [
 ];
 
 const renderComponent = (posts: Post[], isLoading: boolean) => {
-  const queryClient = new QueryClient({
-    defaultOptions: {
-      queries: {
-        retry: false,
-      },
-    },
-  });
-
-  return render(
-    <QueryClientProvider client={queryClient}>
-      <PostList posts={posts} isLoading={isLoading} />
-    </QueryClientProvider>
-  );
+  useDeletePost.mockImplementation(() => ({
+    mutate: () => {},
+    isPending: false,
+  }));
+  return render(<PostList posts={posts} isLoading={isLoading} />);
 };
 
 describe("PostListItem", () => {

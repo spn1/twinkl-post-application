@@ -1,12 +1,12 @@
 import { vi, test, expect } from "vitest";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import { PostListItem } from "./PostListItem";
-import { deletePost } from "@/services/post-service";
 import { Post } from "@/types/post";
+import { useDeletePost } from "../hooks/useDeletePost";
 
-vi.mock("@/services/post-service");
+vi.mock("../hooks/useDeletePost");
+const mockMutate = vi.fn();
 
 const mockPost = {
   userId: 1,
@@ -15,20 +15,13 @@ const mockPost = {
   body: "TEST BODY",
 };
 
-const renderComponent = (props: { post: Post }) => {
-  const queryClient = new QueryClient({
-    defaultOptions: {
-      queries: {
-        retry: false,
-      },
-    },
-  });
+const renderComponent = (post: Post, isPending: boolean) => {
+  useDeletePost.mockImplementation(() => ({
+    mutate: mockMutate,
+    isPending,
+  }));
 
-  return render(
-    <QueryClientProvider client={queryClient}>
-      <PostListItem {...props} />
-    </QueryClientProvider>
-  );
+  return render(<PostListItem post={post} />);
 };
 
 describe("PostListItem", () => {
@@ -37,7 +30,7 @@ describe("PostListItem", () => {
   });
 
   test("renders post with data as expected", () => {
-    renderComponent({ post: mockPost });
+    renderComponent(mockPost, false);
 
     const title = screen.getByText("TEST POST");
     const body = screen.getByText("TEST BODY");
@@ -49,19 +42,19 @@ describe("PostListItem", () => {
   });
 
   test("sends delete request when button is clicked", async () => {
-    renderComponent({ post: mockPost });
+    renderComponent(mockPost, false);
 
     const deleteButton = screen.getByTestId("remove-button-1");
 
     fireEvent.click(deleteButton);
 
     await waitFor(() => {
-      expect(deletePost).toHaveBeenCalled();
+      expect(mockMutate).toHaveBeenCalled();
     });
   });
 
   test.skip("doesn't send delete request when button is clicked while disabled", async () => {
-    renderComponent({ post: mockPost });
+    renderComponent(mockPost, false);
 
     const deleteButton = screen.getByTestId("remove-button-1");
 
@@ -70,7 +63,7 @@ describe("PostListItem", () => {
     await waitFor(() => {
       // Not sure how to test intermittent disabled state
       // expect(deleteButton).toHaveAttribute("disabled", true);
-      expect(deletePost).not.toHaveBeenCalled();
+      expect(mockMutate).not.toHaveBeenCalled();
     });
   });
 });

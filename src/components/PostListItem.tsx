@@ -1,7 +1,5 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-
 import type { Post } from "@/types/post";
-import { deletePost } from "@/services/post-service";
+import { useDeletePost } from "@/hooks/useDeletePost";
 
 type PostItemProps = {
   post: Post;
@@ -9,13 +7,7 @@ type PostItemProps = {
 
 const PostListItem = ({ post }: PostItemProps) => {
   const { title, body, id } = post;
-  const queryClient = useQueryClient();
-  const { mutate, isPending } = useMutation({
-    mutationFn: deletePost,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["posts"] });
-    },
-  });
+  const { mutate, isPending } = useDeletePost();
 
   return (
     <li className="flex justify-between gap-4 py-2 border-b-2 border-grey border-solid">

@@ -1,15 +1,15 @@
 import { POSTS_API_URL } from "@/constants";
 import type { Post } from "@/types/post";
 
-type PostServiceResponse = {
-  data?: Post[];
-  ok?: boolean;
-  status?: number;
+type PostGetResponse = {
+  data: Post[];
 };
 
-const fetchPosts = async (
-  searchQuery: string
-): Promise<PostServiceResponse> => {
+type PostDeleteResponse = {
+  status: number;
+};
+
+const fetchPosts = async (searchQuery: string): Promise<PostGetResponse> => {
   const url = searchQuery.length
     ? `${POSTS_API_URL}/posts?title=${searchQuery}`
     : `${POSTS_API_URL}/posts`;
@@ -25,7 +25,7 @@ const fetchPosts = async (
   return { data };
 };
 
-const deletePost = async (postId: number): Promise<PostServiceResponse> => {
+const deletePost = async (postId: number): Promise<PostDeleteResponse> => {
   if (!postId) {
     return { status: 400 };
   }
