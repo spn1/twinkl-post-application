@@ -1,13 +1,17 @@
-# Twinkl React Tech Test
+# Twinkl React Posts Application
 
-## Task description
+A React application that interacts with a Posts management API (https://jsonplaceholder.typicode.com/posts) to perform CRUD operations (Create, Read, Update, Delete). The application is be implemented using TypeScript.
 
-You are tasked with creating a React application that interacts with a Posts management API (https://jsonplaceholder.typicode.com/posts) to perform CRUD operations (Create, Read, Update, Delete). The application should be implemented using TypeScript and designed to be production-ready.
+## Thoughts
 
-Refer to the guide on how to use the jsonplaceholder API:
-https://jsonplaceholder.typicode.com/guide/
+- The API doesn't actually delete posts, so refetching correct information to update the UI isn't possible - attempted to add optimistic updates but ran into issues since the response doesn't provide updated information
+- Wireframes are very bare-bones, so I took some liberties and kept the UI simple given the short timeframe to do the test.
 
-#### Time Limit: We don't expect you to spend longer than 3 hours on this task. If you'd like to capture any decisions, thoughts, or next steps you would take, feel free to do so.
+## Future Considerations
+
+- Add debouncing to post-api queries (especially on search query)
+- Make delete mutation optimistically update the UI / query cache
+- Make re-fetch / optimistic UI smoother (grey-out deleted post)
 
 #### Requirements
 
@@ -18,7 +22,7 @@ https://jsonplaceholder.typicode.com/guide/
 
 ##### Search mechanism
 
-- Implement a search bar that allows a user to search for posts by title and display only the desired posts. The search should be triggered on change. - [ ]
+- Implement a search bar that allows a user to search for posts by title and display only the desired posts. The search should be triggered on change. - [x]
 
 ##### Delete post
 
@@ -27,11 +31,11 @@ https://jsonplaceholder.typicode.com/guide/
 
 ##### Testing
 
-- Write sufficient tests to satisfy a production-ready application. - [ ]
+- Write sufficient tests to satisfy a production-ready application. - [x]
 
 ##### Documentation
 
-- Add appropriate documentation for your application. - [ ]
+- Add appropriate documentation for your application. - [x]
 
 #### Wireframes
 
@@ -54,11 +58,11 @@ https://jsonplaceholder.typicode.com/guide/
 #### Clone the repository:
 
 ```
-git clone https://github.com/twinkltech/twinkl-react-tech-test.git
+git clone https://github.com/spn1/twinkl-post-application
 ```
 
 ```
-cd twinkl-react-tech-test
+cd twinkl-post-application
 ```
 
 #### Install dependencies:
