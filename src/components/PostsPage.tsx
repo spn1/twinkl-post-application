@@ -5,10 +5,7 @@ import { useGetPosts } from "@/hooks/useGetPosts";
 
 const PostsPage = () => {
   const [searchQuery, setSearchQuery] = useState<string>("");
-  const result = useGetPosts(searchQuery);
-
-  console.log("[PostsPage] result:", result);
-  const { isFetching, isError, data } = result;
+  const { isFetching, isError, data } = useGetPosts(searchQuery);
 
   if (isError) {
     return (
