@@ -1,5 +1,5 @@
 import { vi, test, expect } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 
 import { PostsPage } from "./PostsPage";
 import { Post } from "@/types/post";
@@ -55,25 +55,34 @@ describe("PostListItem", () => {
     expect(searchInputElement).toBeInTheDocument();
   });
 
-  // test("renders error message when there is an error", () => {
-  //   renderComponent(mockPosts, true, false);
+  test("renders error message when there is an error", () => {
+    renderComponent(mockPosts, true, false);
 
-  //   const searchInputElement = screen.getByRole("search");
-  //   const errorTextElement = screen.getByText(
-  //     "Sorry, there was a problem fetching your posts."
-  //   );
+    const searchInputElement = screen.queryByRole("search");
+    const errorTextElement = screen.getByText(
+      "Sorry, there was a problem fetching your posts."
+    );
 
-  //   expect(searchInputElement).toBeInTheDocument();
-  //   expect(errorTextElement).toBeInTheDocument();
-  // });
+    expect(searchInputElement).not.toBeInTheDocument();
+    expect(errorTextElement).toBeInTheDocument();
+  });
 
-  // test("renders loading message when data is loading", () => {
-  //   renderComponent(mockPosts, false, true);
+  test("renders loading message when data is loading", () => {
+    renderComponent(mockPosts, false, true);
 
-  //   const searchInputElement = screen.getByRole("search");
-  //   const loadingTextElement = screen.getByText("Loading...");
+    const searchInputElement = screen.getByRole("search");
+    const loadingTextElement = screen.getByText("Loading...");
 
-  //   expect(searchInputElement).toBeInTheDocument();
-  //   expect(loadingTextElement).toBeInTheDocument();
-  // });
+    expect(searchInputElement).toBeInTheDocument();
+    expect(loadingTextElement).toBeInTheDocument();
+  });
+
+  test("sends search query to fetch function", () => {
+    renderComponent(mockPosts, false, false);
+
+    const searchInputElement = screen.getByRole("search");
+    fireEvent.change(searchInputElement, { target: { value: "test" } });
+
+    expect(useGetPosts).toBeCalledWith("test");
+  });
 });
